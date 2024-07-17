@@ -24,7 +24,7 @@ function Login() {
         .post("http://localhost:8081/login", values)
         .then((res) => {
           if(res.data === "Success"){
-            navigate("/home");
+            navigate("/UserList");
           }else{
             alert("No Record Found");
           }

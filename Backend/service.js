@@ -38,6 +38,49 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/alluser", (req, res) => {
+  const sql = "SELECT * FROM `signup`";
+  db.query(sql, [], (err, data) => {
+    if (err) {
+      return res.json("Error");
+    }
+    if (data.length > 0) {
+      return res.json(data);
+    } else {
+      return res.json("Failed");
+    }
+  });
+});
+
+app.post("/edituser", (req, res) => {
+  const sql = "UPDATE signup SET `name` = ? WHERE `id` = ?";
+  const values = [req.body.name, req.body.id];
+  db.query(sql, values, (err, data) => {
+    if (err) {
+      return res.json("Error");
+    }
+    return res.json(data);
+  });
+});
+
+app.post("/deleteuser", (req, res) => {
+  const sql = "DELETE FROM signup WHERE `id` = ?";
+  const id = req.body.id;
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting user:", err);
+      return res.status(500).json({ error: "Failed to delete user" });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res.status(404).json({ error: "User not found" });
+    }
+  });
+});
+
+
 app.listen(8081, () => {
   console.log("listen");
 });
